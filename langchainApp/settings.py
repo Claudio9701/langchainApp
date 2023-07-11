@@ -160,7 +160,7 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 # Django Encrypted Model Fields Settings
-FIELD_ENCRYPTION_KEY = os.getenv("FIELD_ENCRYPTION_KEY", Fernet.generate_key())
+FIELD_ENCRYPTION_KEY = Fernet.generate_key()
 
 # Set a maximum size for csv file uploads
 CSV_UPLOAD_MAX_SIZE = 1e9  # 1 GB

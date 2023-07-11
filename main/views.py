@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
+from django.conf import settings
 
 from .forms import UploadFileForm, NewUserForm
 
@@ -73,7 +74,7 @@ def upload_csv_to_analyze(request):
 
             # Create langchain agent
             agent = create_pandas_dataframe_agent(
-                llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, verbose=True
+                llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, verbose=settings.DEBUG
             )
 
             # Run querys to get desired information

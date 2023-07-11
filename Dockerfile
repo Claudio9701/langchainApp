@@ -1,4 +1,4 @@
-FROM library/python:3.8-slim-buster
+FROM python:3.9.17-slim-bullseye
 
 RUN apt-get update \
     # dependencies for building Python packages

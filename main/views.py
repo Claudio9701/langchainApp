@@ -46,6 +46,16 @@ def register(request):
     )
 
 
+def upload_file_handler(file):
+    if file.multiple_chunks():
+        for chunk in file.chunks():
+            df = pd.read_csv(io.BytesIO(chunk.read()))
+    else:
+        df = pd.read_csv(io.BytesIO(file.read()))
+
+    return df
+
+
 @login_required
 def upload_csv_to_analyze(request):
     """Upload a CSV file to analyze."""
@@ -54,12 +64,17 @@ def upload_csv_to_analyze(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            uploaded_file = request.FILES["file"]
-
-            if uploaded_file.chunks():
-                df = pd.read_csv(uploaded_file)
-            else:
-                df = pd.read_csv(io.BytesIO(uploaded_file.read()))
+            try:
+                uploaded_file = request.FILES["file"]
+                df = upload_file_handler(uploaded_file)
+            except Exception as e:
+                print(e)
+                messages.error(request, "Please upload a valid CSV file.")
+                return render(
+                    request=request,
+                    template_name="main/upload_csv_to_analyze.html",
+                    context={"form": form},
+                )
 
             # Get user profile
             userprofile = request.user.userprofile

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" class="h-100">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}AI CSV Analyzer{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    {% block extra_head_tags %}{% endblock %}
+</head>
+
+<body class="d-flex h-100 text-center text-bg-dark">
+
+    {% block content %}
+
+    {% block main %}{% endblock %}
+
+    {% block footer %}{% endblock %}
+
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    {% block extra_body_tags %}{% endblock %}
+</body>
+
+</html>

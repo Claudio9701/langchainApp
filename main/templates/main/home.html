@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head_tags %}
+<link rel="stylesheet" href="{% static 'main/css/cover.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column text-center h-100">
+    {% block header %}
+    {% include "includes/navbar.html" %}
+    {% endblock %}
+
+    {% block main %}
+    <main class="px-3">
+        <h1>Get to know <strong><u>BotoAnalyst</u></strong> 🤖📈.</h1>
+        <p class="lead">Use our ChatGPT powered 🚀 bot to analyze your custom data 👨🏽‍💻.</p>
+        <p class="lead">
+            <a href="{% url 'upload_csv_to_analyze' %}"
+                class="btn btn-lg btn-light fw-bold border-white bg-white">🔥Upload <strong><u>your</u></strong>
+                data🔥</a>
+        </p>
+    </main>
+    {% endblock %}
+
+    {% block footer %}
+    <footer class="mt-auto text-white-50">
+        <p>Credits for the <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a> template to <a
+                href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+    </footer>
+    {% endblock %}
+
+</div>
+{% endblock %}

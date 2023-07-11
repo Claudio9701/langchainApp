@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_head_tags %}
+<link rel="stylesheet" href="{% static 'main/css/cover.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column text-center h-100">
+    {% block header %}
+    {% include "includes/navbar.html" %}
+    {% endblock %}
+
+    {% block main %}
+    <main class="px-3">
+        <h1>Hi <strong><u>{{ user.username }}!</u></strong> 👨🏽‍💻</h1>
+        <form method="post" enctype="multipart/form-data" id="fileForm">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-lg btn-light fw-bold border-white bg-white" id="submitBtn">Analyze your
+                data🔥</button>
+        </form>
+    </main>
+    {% endblock %}
+
+    {% block footer %}
+    <footer class="mt-auto text-white-50">
+        <p>Product powered by <a href="https://openai.com/" class="text-white">ChatGPT</a> and <a
+                href="https://python.langchain.com/" class="text-white">🦜️🔗 LangChain</a>.</p>
+    </footer>
+    {% endblock %}
+</div>
+
+{% block extra_body_tags %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('fileForm').addEventListener('submit', function (e) {
+            var button = document.getElementById('submitBtn');
+            button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+            button.disabled = true;  // Optionally disable the button to prevent multiple clicks
+        });
+    });
+</script>
+{% endblock %}
+
+{% endblock %}

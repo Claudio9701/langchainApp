@@ -72,7 +72,7 @@ class NewUserForm(UserCreationForm):
 
 
 def validate_csv_format(value):
-    """Validate the CSV file by checking if it can be opened with pandas.read_csv."""
+    """Validate the CSV file by checking if it can be opened with pandas.read_csv (Only first 5 rows)."""
 
     if not value.name.endswith(".csv"):
         raise ValidationError(
@@ -81,8 +81,10 @@ def validate_csv_format(value):
         )
 
     try:
-        first_chunk = next(value.chunks())
-        pd.read_csv(io.BytesIO(first_chunk))
+        if value.multiple_chunks():
+            pd.read_csv(value.temporary_file_path(), nrows=5)
+        else:
+            pd.read_csv(io.BytesIO(next(value.chunks())), nrows=5)
     except Exception as e:
         raise ValidationError(
             message="The provided CSV file is too large.",

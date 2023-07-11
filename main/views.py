@@ -48,10 +48,9 @@ def register(request):
 
 def upload_file_handler(file):
     if file.multiple_chunks():
-        for chunk in file.chunks():
-            df = pd.read_csv(io.BytesIO(chunk.read()))
+        df = pd.read_csv(file.temporary_file_path())
     else:
-        df = pd.read_csv(io.BytesIO(file.read()))
+        df = pd.read_csv(io.BytesIO(next(file.chunks())))
 
     return df
 
@@ -64,17 +63,9 @@ def upload_csv_to_analyze(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            try:
-                uploaded_file = request.FILES["file"]
-                df = upload_file_handler(uploaded_file)
-            except Exception as e:
-                print(e)
-                messages.error(request, "Please upload a valid CSV file.")
-                return render(
-                    request=request,
-                    template_name="main/upload_csv_to_analyze.html",
-                    context={"form": form},
-                )
+            # File validation is done by the UploadFileForm class
+            uploaded_file = request.FILES["file"]
+            df = upload_file_handler(uploaded_file)
 
             # Get user profile
             userprofile = request.user.userprofile
@@ -98,13 +89,9 @@ def upload_csv_to_analyze(request):
             df_description_prompt = "Please provide a description of the dataset considering the data types, the ranges of values, and any relevant pattern (high cardinality, percentage of missing values, distribution, correlation, among others)."
             df_description_response = agent.run(df_description_prompt + prompt_suffix)
             # Data analysis
-            prompt_suffix_force_paragraph = (
-                "Use <p> and <br> tags to format the paragraphs of your response."
-            )
+            prompt_suffix_force_paragraph = "Use <p> and <br> tags to format the paragraphs of your response."
             df_analysis_prompt = "What analysis could be potentially insightful for this specific dataset. Please provide a brief description of the analysis and the expected outcome."
-            df_analysis_response = agent.run(
-                df_analysis_prompt + prompt_suffix + prompt_suffix_force_paragraph
-            )
+            df_analysis_response = agent.run(df_analysis_prompt + prompt_suffix + prompt_suffix_force_paragraph)
 
             return render(
                 request,

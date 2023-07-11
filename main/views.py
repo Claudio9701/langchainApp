@@ -64,7 +64,8 @@ def upload_csv_to_analyze(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             # File validation is done by the UploadFileForm class
-            df = upload_file_handler(request.FILES["file"])
+            uploaded_file = request.FILES["file"]
+            df = upload_file_handler(uploaded_file)
 
             # Get user profile
             userprofile = request.user.userprofile

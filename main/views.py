@@ -83,24 +83,24 @@ def upload_csv_to_analyze(request):
                 llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, verbose=settings.DEBUG
             )
 
-            # Run querys to get desired information
-            prompt_suffix = " Please provide the response in a HTML format."
-
             # Data description
             df_description_prompt = "Analyze the CSV data and describe the key characteristics in each column such as datatype (numerical, categorical), range of values, and any notable patterns. The description should be comprehensive yet concise."
-            df_description_response = agent.run(df_description_prompt + prompt_suffix)
-
             # Data analysis
-            df_analysis_prompt = "Given the data properties outlined in your previous response, suggest specific analyses that would be insightful for this dataset. The suggestions should be specific to this data and avoid general or broad analysis recommendations."
-            df_analysis_response = agent.run(df_analysis_prompt + prompt_suffix)
+            df_analysis_prompt = "\n\nSuggest 5 specific analyses that would be insightful for this dataset. Be specific, indicate variable names. Justify your recommendation."
+
+            try:
+                # Run querys to get desired information
+                agent_response = agent.run(df_description_prompt + df_analysis_prompt)
+            except Exception as e:
+                print("Error running prompt:", e)
+                agent_response = "Something went wrong 🥺 <br><br> <button class='btn btn-lg btn-light fw-bold border-white bg-white' onclick='window.location.reload();'>Try again 🔁</button> "
 
             return render(
                 request,
                 "main/csv_analysis.html",
                 {
                     "uploaded_filename": uploaded_file.name,
-                    "df_description": df_description_response,
-                    "df_analysis": df_analysis_response,
+                    "agent_response": agent_response.split("\n"),
                 },
             )
 

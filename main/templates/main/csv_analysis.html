@@ -15,17 +15,9 @@
     <div class="row">
         <div class="col col-12">
             <div class="card mb-2 overflow-auto">
-                <h3 class="card-header">Data Description</h3>
+                <h3 class="card-header">BotoAnalyst says:</h3>
                 <div class="card-body">
-                    {{ df_description | safe }}
-                </div>
-            </div>
-        </div>
-        <div class="col col-12">
-            <div class="card mb-2 overflow-auto">
-                <h3 class="card-header">Initial Analysis Recomendation</h3>
-                <div class="card-body">
-                    {{ df_analysis | safe }}
+                    {{ agent_response | safe }}
                 </div>
             </div>
         </div>

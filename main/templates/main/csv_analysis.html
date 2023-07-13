@@ -9,20 +9,47 @@
     <div class="row">
         <div class="col col-lg-12">
             <h3>Analyzed file name: <strong><u>{{ uploaded_filename }}</u></strong> 👨🏽‍💻</h3>
+            <br>
+            <h5>🤖 BotoAnalyst says:</h5>
         </div>
     </div>
 
+    {% if agent_response_error %}
     <div class="row">
         <div class="col col-12">
             <div class="card mb-2 overflow-auto">
-                <h3 class="card-header">BotoAnalyst says:</h3>
+                <h3 class="card-header">Data analysis:</h3>
+                <div class="card-body text-center">
+                    <p>Something went wrong 🥺</p>
+                    <button class="btn btn-lg btn-light fw-bold border-white bg-white"
+                        onclick="window.location.reload();">Try again 🔁</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col col-12">
+            <div class="card mb-2 overflow-auto">
+                <h3 class="card-header">Data description:</h3>
                 <div class="card-body text-start">
-                    {% for response_line in agent_response %}
+                    {% for response_line in agent_response_description %}
+                    {{ response_line }}<br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col col-12">
+            <div class="card mb-2 overflow-auto">
+                <h3 class="card-header">Data analysis:</h3>
+                <div class="card-body text-start">
+                    {% for response_line in agent_response_analyze %}
                     {{ response_line }}<br>
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

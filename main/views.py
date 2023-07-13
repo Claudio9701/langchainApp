@@ -90,18 +90,24 @@ def upload_csv_to_analyze(request):
 
             try:
                 # Run querys to get desired information
-                agent_response = agent.run(df_description_prompt + df_analysis_prompt)
+                agent_response_description = agent.run(df_description_prompt)
+                agent_response_analyze = agent.run(df_analysis_prompt)
+                return render(
+                    request,
+                    "main/csv_analysis.html",
+                    {
+                        "uploaded_filename": uploaded_file.name,
+                        "agent_response_description": agent_response_description.split("\n"),
+                        "agent_response_analyze": agent_response_analyze.split("\n"),
+                    },
+                )
             except Exception as e:
                 print("Error running prompt:", e)
-                agent_response = "Something went wrong 🥺 <br><br> <button class='btn btn-lg btn-light fw-bold border-white bg-white' onclick='window.location.reload();'>Try again 🔁</button> "
 
-            return render(
-                request,
-                "main/csv_analysis.html",
-                {
-                    "uploaded_filename": uploaded_file.name,
-                    "agent_response": agent_response.split("\n"),
-                },
-            )
+                return render(
+                    request,
+                    "main/csv_analysis.html",
+                    {"uploaded_filename": uploaded_file.name, "agent_response_error": True},
+                )
 
     return render(request, "main/upload_csv_to_analyze.html", {"form": form})

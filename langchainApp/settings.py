@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
-from cryptography.fernet import Fernet
-
 
 IN_PRODUCTION = os.getenv("IN_PRODUCTION", default=0)
 

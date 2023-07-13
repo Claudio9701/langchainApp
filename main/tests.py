@@ -10,7 +10,7 @@ from .models import UserProfile
 class TestViews(TestCase):
     def setUp(self):
         self.client = Client()
-        self.home_url = reverse("home")  # assuming you have named your urls
+        self.home_url = reverse("home") 
         self.register_url = reverse("register")
         self.upload_csv_url = reverse("upload_csv_to_analyze")
         self.user = User.objects.create_user(username="testuser", password="12345")

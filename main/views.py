@@ -75,7 +75,7 @@ def upload_csv_to_analyze(request):
                 temperature=0,
                 model="gpt-3.5-turbo-0613",
                 openai_api_key=userprofile.openai_api_key,
-                verbose=True,
+                verbose=settings.DEBUG,
             )
 
             # Create langchain agent
@@ -84,14 +84,15 @@ def upload_csv_to_analyze(request):
             )
 
             # Run querys to get desired information
-            prompt_suffix = "\nPlease format your response in HTML that is user-friendly and easily readable. Use class='table' for table tags and scope='col' for th tags inside thead and for first th tag inside tbody."
+            prompt_suffix = " Please provide the response in a HTML format."
+
             # Data description
-            df_description_prompt = "Please provide a description of the dataset considering the data types, the ranges of values, and any relevant pattern (high cardinality, percentage of missing values, distribution, correlation, among others)."
+            df_description_prompt = "Analyze the CSV data and describe the key characteristics in each column such as datatype (numerical, categorical), range of values, and any notable patterns. The description should be comprehensive yet concise."
             df_description_response = agent.run(df_description_prompt + prompt_suffix)
+
             # Data analysis
-            prompt_suffix_force_paragraph = "Use <p> and <br> tags to format the paragraphs of your response."
-            df_analysis_prompt = "What analysis could be potentially insightful for this specific dataset. Please provide a brief description of the analysis and the expected outcome."
-            df_analysis_response = agent.run(df_analysis_prompt + prompt_suffix + prompt_suffix_force_paragraph)
+            df_analysis_prompt = "Given the data properties outlined in your previous response, suggest specific analyses that would be insightful for this dataset. The suggestions should be specific to this data and avoid general or broad analysis recommendations."
+            df_analysis_response = agent.run(df_analysis_prompt + prompt_suffix)
 
             return render(
                 request,

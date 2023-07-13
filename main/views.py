@@ -86,19 +86,21 @@ def upload_csv_to_analyze(request):
             # Data description
             df_description_prompt = "Analyze the CSV data and describe the key characteristics in each column such as datatype (numerical, categorical), range of values, and any notable patterns. The description should be comprehensive yet concise."
             # Data analysis
-            df_analysis_prompt = "\n\nGiven the data properties outlined in your previous response, suggest specific analyses that would be insightful for this dataset. The suggestions should be specific to this data and avoid general or broad analysis recommendations."
-            # Format of response
-            prompt_suffix = "\n\nPlease provide the response inside a div tag with id='response', use Bootstrap 5 classes to style the output."
+            df_analysis_prompt = "\n\nSuggest 5 specific analyses that would be insightful for this dataset. Be specific, indicate variable names. Justify your recommendation."
 
-            # Run querys to get desired information
-            agent_response = agent.run(df_description_prompt + df_analysis_prompt + prompt_suffix)
+            try:
+                # Run querys to get desired information
+                agent_response = agent.run(df_description_prompt + df_analysis_prompt)
+            except Exception as e:
+                print("Error running prompt:", e)
+                agent_response = "Something went wrong 🥺 <br><br> <button class='btn btn-lg btn-light fw-bold border-white bg-white' onclick='window.location.reload();'>Try again 🔁</button> "
 
             return render(
                 request,
                 "main/csv_analysis.html",
                 {
                     "uploaded_filename": uploaded_file.name,
-                    "agent_response": agent_response,
+                    "agent_response": agent_response.split("\n"),
                 },
             )
 

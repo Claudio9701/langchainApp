@@ -16,8 +16,10 @@
         <div class="col col-12">
             <div class="card mb-2 overflow-auto">
                 <h3 class="card-header">BotoAnalyst says:</h3>
-                <div class="card-body">
-                    {{ agent_response | safe }}
+                <div class="card-body text-start">
+                    {% for response_line in agent_response %}
+                    {{ response_line }}<br>
+                    {% endfor %}
                 </div>
             </div>
         </div>
